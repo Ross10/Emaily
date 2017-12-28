@@ -1,13 +1,31 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+require('./models/User');
+require('./services/passport');
 
+
+
+//Connect to our DB.
+mongoose.connect(keys.mongoURI);
 const app = express();
 
-//A route handler to watch for incoming requestes with this method.
-app.get('/', (req,res) => {
-    res.send({bye: 'buddy'});
-});
+//The maxAge is on MilSec.
+app.use(
+    cookieSession({
+       maxAge: 30 * 24 *60 *60 * 1000,//How long the cockie can be validate - Here the cockie will be last for 30 days. 
+       keys: [keys.cookieKey]//the coockieKey needs to be encrypt.
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./routes/authRoutes')(app);
 
 // If heroku gave us a port to use - than use it - otherwise use 5000 on localhost.
-const PORT  = process.env.PORT || 5000;
+const PORT  = process.env.PORT || 5002;
 
 app.listen(PORT);
