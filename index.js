@@ -27,5 +27,6 @@ require('./routes/authRoutes')(app);
 
 // If heroku gave us a port to use - than use it - otherwise use 5000 on localhost.
 const PORT  = process.env.PORT || 5002;
+console.log("port is : " ,PORT);
 
 app.listen(PORT);
