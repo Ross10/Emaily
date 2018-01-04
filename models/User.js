@@ -12,5 +12,6 @@ const userSchema = new Schema({
     name: String
 });
 
+
 //This will create a new collection call "users".
 mongoose.model('users',userSchema);
